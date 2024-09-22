@@ -4,34 +4,31 @@
 
 {% block extra_styles %}
     <style>
-        .toggle-group {
+        .button-group {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
-        .toggle-group label {
-            margin-right: 10px;
-        }
-        .toggle-group input {
-            margin-right: 5px;
+        .button-group button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <form method="POST" action="{{ url_for('flast.flas') }}">
-    <div class="toggle-group">
-        <input type="radio" id="range1" name="range" value="1" checked>
-        <label for="range1">1-10</label>
+    <div class="button-group">
+        <a href="{{ url_for('flast.task1') }}">
+            <button>1-9</button>
+        </a>
+        <a href="{{ url_for('flast.task2') }}">
+            <button>10-99</button>
+        </a>
+        <a href="{{ url_for('flast.task3') }}">
+            <button>100-999</button>
+        </a>
     </div>
-    <div class="toggle-group">
-        <input type="radio" id="range2" name="range" value="2">
-        <label for="range2">11-100</label>
-    </div>
-    <div class="toggle-group">
-        <input type="radio" id="range3" name="range" value="3">
-        <label for="range3">101-1000</label>
-    </div>
-    <button type="submit">Использовать изменения</button>
-    </form>
 {% endblock %}
