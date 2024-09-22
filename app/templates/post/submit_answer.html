@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+
+{% block style %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/start.css') }}">
+
+  <!-- Добавляем стили для модального окна -->
+  <style>
+    /* Стили для модального окна */
+    .modal {
+      display: none; /* Окно скрыто по умолчанию */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4); /* Полупрозрачный фон */
+    }
+
+    /* Контент модального окна */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    /* Кнопка закрытия модального окна */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Блокировка остальных элементов на странице */
+    body.modal-open {
+      overflow: hidden;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+
+    <h1>Введите ответ</h1>
+    <form id="responseForm" method="post" action="{{ url_for('post.submit_answer', random_hex=post.random_hex) }}">
+        <input type="text" name="response" class="form-control mb-2" placeholder="Введите ответ" required>
+        <button type="submit" class="btn btn-success">Принять ответ</button>
+    </form>
+
+    {% if show_retry %}
+        <button id="retryButton" class="btn btn-warning mt-3">Повторить</button>
+    {% endif %}
+
+    <!-- Кнопка для открытия модального окна -->
+    <button id="helpButton" class="btn btn-info mt-3">Помощь</button>
+
+    <!-- Модальное окно -->
+    <div id="helpModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h5>Очередь</h5>
+        <!-- Здесь будет выведена очередь -->
+        <p>{{ post.queue[1:-1] }}</p>
+      </div>
+    </div>
+
+</div>
+
+<!-- Добавляем JavaScript для работы модального окна -->
+<script>
+    // Получаем элементы
+    var modal = document.getElementById("helpModal");
+    var btn = document.getElementById("helpButton");
+    var span = document.getElementsByClassName("close")[0];
+
+    // Открытие модального окна при нажатии на кнопку "Помощь"
+    btn.onclick = function() {
+        modal.style.display = "block";
+        document.body.classList.add("modal-open"); // Блокировка прокрутки страницы
+    }
+
+    // Закрытие модального окна при нажатии на крестик
+    span.onclick = function() {
+        modal.style.display = "none";
+        document.body.classList.remove("modal-open"); // Разблокировка прокрутки
+    }
+
+    // Закрытие модального окна при нажатии на любое место вне окна
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.classList.remove("modal-open"); // Разблокировка прокрутки
+        }
+    }
+
+    // Логика для кнопки "Повторить"
+    document.getElementById('retryButton')?.addEventListener('click', () => {
+        location.href = "{{ url_for('post.show_queue', random_hex=post.random_hex) }}";
+    });
+</script>
+
+{% endblock %}

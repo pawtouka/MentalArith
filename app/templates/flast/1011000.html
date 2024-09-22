@@ -1,0 +1,66 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Задача 101-1000{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        .number-images {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .number-images img {
+            margin: 0;
+            width: 100px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-group input {
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .input-group button {
+            padding: 5px 10px;
+            margin-bottom: 10px;
+        }
+        .flash-messages {
+            margin: 10px 0;
+            text-align: center;
+        }
+        .flash-messages .success {
+            color: green;
+        }
+        .flash-messages .danger {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="number-images">
+        {% for image in number_images %}
+            <img src="{{ url_for('static', filename='flas/' + image) }}" alt="Number {{ loop.index }}">
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="input-group">
+        <input type="text" name="user_input" placeholder="Введите число">
+        <input type="hidden" name="mode" value="mode3">
+
+        <button type="submit" name="action" value="check">Проверить</button>
+        <button type="submit" name="action" value="next">Далее</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}

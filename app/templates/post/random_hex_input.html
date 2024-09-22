@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <form method="POST" action="{{ url_for('post.handle_random_hex') }}">
+        <div>
+            <label for="random_hex">Enter Random Hex:</label>
+            <input type="text" id="random_hex" name="random_hex" placeholder="Enter code">
+        </div>
+        <div style="margin-top: 10px;">
+            <button type="submit">Play</button>
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Создание режима{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/btns.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/libs/font-awesome.min.css') }}">
+{% endblock %}
+
+{% block content %}
+<form method="post" class="form-control d-flex flex-column gap-2">
+    <input name="teacher" type="text" value="{{ current_user.name }}" class="form-control" readonly>
+
+    <!-- Выпадающий список для выбора темы -->
+    <select name="topic" id="topic" class="form-control" onchange="updateMaximumRange()">
+        <option value="просто">Просто</option>
+        <option value="брат">Брат</option>
+    </select>
+
+    <!-- Ползунок для выбора максимума -->
+    <label for="maximum" class="form-label">Выберите максимум:</label>
+    <input name="maximum" id="maximum" type="range" class="form-range" min="1" max="9" value="2" oninput="updateMaximumValue()">
+    <span id="maximumValue">2</span>
+
+    <!-- Ползунок для выбора действий -->
+    <label for="actions" class="form-label">Выберите количество действий:</label>
+    <input name="actions" id="actions" type="range" class="form-range" min="2" max="20" value="2" oninput="updateActionValue()">
+    <span id="actionValue">2</span>
+
+    <!-- Toggle-кнопки для выбора dignits -->
+    <label class="form-label">Выберите число (1-3):</label>
+    <div class="toggle-container">
+        <button type="button" class="toggle-button active" data-value="1">1</button>
+        <button type="button" class="toggle-button" data-value="2">2</button>
+        <button type="button" class="toggle-button" data-value="3">3</button>
+        <!-- <button type="button" class="toggle-button" data-value="4">4</button> -->
+        <input type="hidden" name="dignits" id="dignits" value="1"> <!-- Скрытое поле для отправки -->
+    </div>
+
+    <input value="Добавить" type="submit" class="btn btn-success">
+</form>
+
+<script>
+    // Функции для обновления диапазонов значений ползунков
+    function updateMaximumRange() {
+        var topic = document.getElementById("topic").value;
+        var maximumSlider = document.getElementById("maximum");
+
+        if (topic === "просто") {
+            maximumSlider.min = 2;
+            maximumSlider.max = 9;
+            maximumSlider.value = 2;
+        } else if (topic === "брат") {
+            maximumSlider.min = 1;
+            maximumSlider.max = 4;
+            maximumSlider.value = 1;
+        }
+        updateMaximumValue();  // Обновляем отображаемое значение
+    }
+
+    function updateMaximumValue() {
+        var maximumValue = document.getElementById("maximum").value;
+        document.getElementById("maximumValue").innerText = maximumValue;
+    }
+
+    function updateActionValue() {
+        var actionValue = document.getElementById("actions").value;
+        document.getElementById("actionValue").innerText = actionValue;
+    }
+
+    // Логика работы с toggle-кнопками
+    const toggleButtons = document.querySelectorAll('.toggle-button');
+    const dignitsInput = document.getElementById('dignits');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Снять активный класс со всех кнопок
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            // Добавить активный класс на текущую кнопку
+            this.classList.add('active');
+            // Обновить скрытое поле с выбранным значением
+            dignitsInput.value = this.getAttribute('data-value');
+        });
+    });
+
+    // Инициализация значений при загрузке страницы
+    window.onload = function() {
+        updateMaximumRange();
+        updateActionValue();
+    };
+</script>
+{% endblock %}

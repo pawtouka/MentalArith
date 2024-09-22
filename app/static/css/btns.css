@@ -1,0 +1,25 @@
+/* Стиль контейнера для кнопок */
+.button-container {
+    display: flex; /* Используем flexbox для выравнивания кнопок в одну строку */
+    justify-content: center; /* Выравниваем кнопки по центру */
+    gap: 10px; /* Отступы между кнопками */
+}
+
+/* Общий стиль кнопок */
+.toggle-button {
+    width: 50px;
+    height: 50px;
+    background-color: #ddd;
+    color: #000;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Стиль активной кнопки */
+.active {
+    background-color: #4CAF50;
+    color: white;
+}

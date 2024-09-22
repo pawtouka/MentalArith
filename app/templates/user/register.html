@@ -1,0 +1,55 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" class="form-control d-flex flex-column gap-2">
+        {{ form.csrf_token }}
+
+        <!-- Toggle кнопки для выбора статуса -->
+        <div class="btn-group" role="group" aria-label="Status toggle">
+            <input type="button" id="teacher-btn" class="btn btn-outline-primary" value="Учитель" onclick="setStatus('teacher')">
+            <input type="button" id="student-btn" class="btn btn-outline-primary" value="Ученик" onclick="setStatus('student')">
+        </div>
+
+        <!-- Скрытое поле для хранения статуса -->
+        <input type="hidden" id="status" name="status" value="student">
+
+        {{ form.name(class="form-control", placeholder="ФИО") }}
+        {{ form.login(class="form-control", placeholder="Логин") }}
+        {% if form.login.errors %}
+            <div class="invalid-feedback" style="display: block!important;">
+            {% for error in form.login.errors %}
+                <span>{{ error }}</span>
+            {% endfor %}
+            </div>
+        {% endif %}
+        {{ form.avatar(class="form-control") }}
+        {{ form.password(class="form-control", placeholder="Пароль") }}
+        {{ form.confirm_password(class="form-control", placeholder="Подтвердите пароль") }}
+        {{ form.submit(class="btn btn-success") }}
+    </form>
+
+<script>
+    function setStatus(status) {
+        // Устанавливаем значение скрытого поля в зависимости от выбранного статуса
+        document.getElementById('status').value = status;
+
+        // Обновляем стили кнопок для наглядности
+        if (status === 'teacher') {
+            document.getElementById('teacher-btn').classList.add('btn-primary');
+            document.getElementById('teacher-btn').classList.remove('btn-outline-primary');
+            document.getElementById('student-btn').classList.add('btn-outline-primary');
+            document.getElementById('student-btn').classList.remove('btn-primary');
+        } else {
+            document.getElementById('student-btn').classList.add('btn-primary');
+            document.getElementById('student-btn').classList.remove('btn-outline-primary');
+            document.getElementById('teacher-btn').classList.add('btn-outline-primary');
+            document.getElementById('teacher-btn').classList.remove('btn-primary');
+        }
+    }
+
+    
+</script>
+
+{% endblock %}

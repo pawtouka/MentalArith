@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block style %}
+  <style>
+    .center-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80vh; /* Центрируем по высоте */
+      flex-direction: row;
+    }
+
+    .center-buttons .btn {
+      width: 200px;
+      height: 150px;
+      font-size: 20px;
+      margin: 10px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="center-buttons">
+    <a href="{{ url_for('post.posters') }}" class="btn btn-outline-light me-2">Режимы</a>
+    <a href="{{ url_for('flast.flas') }}" class="btn btn-outline-light me-2">Флеш-карты</a>
+    <a href="{{ url_for('post.handle_random_hex') }}" class="btn btn-outline-light me-2">Домашнее задание</a>
+</div>
+{% endblock %}

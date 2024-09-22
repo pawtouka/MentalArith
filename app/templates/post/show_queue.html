@@ -1,0 +1,85 @@
+{% extends 'main/base.html' %}
+
+{% block style %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/start.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container text-center">
+    <h1 id="status">Приготовьтесь!</h1>
+    <h2 id="valueDisplay" class="display-4"></h2>
+
+    <!-- Кнопка "Помощь", которая покажет значения queue -->
+    <button id="helpButton" class="btn btn-info d-none" onclick="showQueueModal()">Помощь</button>
+    <div id="queueDisplay" class="d-none">{{ post.queue }}</div>
+</div>
+
+<div id="overlay"></div>  <!-- Затемнённый фон -->
+<div id="queueModal"></div>  <!-- Модальное окно для queue -->
+
+<script>
+    const queue = "{{ post.queue[1:-1] }}".split(',').map(item => item.trim());  // Преобразуем queue в массив
+    const statusElement = document.getElementById('status');
+    const valueDisplay = document.getElementById('valueDisplay');
+    const helpButton = document.getElementById('helpButton');
+    const queueModal = document.getElementById('queueModal');
+    const overlay = document.getElementById('overlay');
+
+    let displayDelay = 1000;
+    let speechRate = 10;
+    let startSequenceDelay = 300;
+
+    function speak(text) {
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.rate = speechRate;
+        window.speechSynthesis.speak(msg);
+    }
+
+    function startSequence() {
+        setTimeout(() => { statusElement.innerText = 'На старт'; speak('На старт'); }, startSequenceDelay);
+        setTimeout(() => { statusElement.innerText = 'Внимание'; speak('Внимание'); }, startSequenceDelay * 2);
+        setTimeout(() => { statusElement.innerText = 'Марш'; speak('Марш'); }, startSequenceDelay * 3);
+        setTimeout(() => {
+            statusElement.innerText = '';
+            displayQueue();
+        }, startSequenceDelay * 4);
+    }
+
+    function displayQueue() {
+        let delay = 0;
+        queue.forEach((value, index) => {
+            setTimeout(() => {
+                valueDisplay.innerText = value;
+                speak(value);
+            }, delay);
+            delay += displayDelay;
+        });
+
+        setTimeout(() => {
+            valueDisplay.innerText = '';
+            statusElement.innerText = 'Введите ответ';
+            location.href = "{{ url_for('post.submit_answer', random_hex=post.random_hex) }}";
+        }, delay);
+    }
+
+    function showQueueModal() {
+        overlay.classList.add('active');
+        queueModal.classList.add('active');
+        queueModal.innerText = queue.join(', ');
+        helpButton.classList.add('d-none');
+    }
+
+    function hideQueueModal() {
+        overlay.classList.remove('active');
+        queueModal.classList.remove('active');
+        helpButton.classList.remove('d-none');
+    }
+
+    window.onload = function() {
+        startSequence();
+    };
+
+    overlay.addEventListener('click', hideQueueModal);
+</script>
+{% endblock %}
