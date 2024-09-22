@@ -17,21 +17,21 @@ upper_bound = 100
 def flas():
     if request.method == 'POST':
         range_value = request.form.get('range')
-        if range_value == '1':
-            lower_bound = 1
-            upper_bound = 9
-        elif range_value == '2':
-            lower_bound = 10
-            upper_bound = 99
-        elif range_value == '3':
-            lower_bound = 100
-            upper_bound = 999
 
-        # Генерация случайного числа
-        random_number = random.randint(lower_bound, upper_bound)
-        string = 'flast.task' + range_value
-        # Сохранение числа в сессии для использования на другой странице
-        return redirect(url_for('flast.task'+range_value, number=random_number))
+        range_value = request.form.get('range')
+
+        if range_value == '1':
+            # Перенаправление на task1
+            random_number = random.randint(1, 9)
+            return redirect(url_for('flast.task1', number=random_number))
+        elif range_value == '2':
+            # Перенаправление на task2
+            random_number = random.randint(10, 99)
+            return redirect(url_for('flast.task2', number=random_number))
+        elif range_value == '3':
+            # Перенаправление на task3
+            random_number = random.randint(100, 999)
+            return redirect(url_for('flast.task3', number=random_number))
 
     return render_template('flast/flas.html')
 

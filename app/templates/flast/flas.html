@@ -19,19 +19,19 @@
 {% endblock %}
 
 {% block content %}
-    <form method="POST">
-        <div class="toggle-group">
-            <input type="radio" id="range1" name="range" value="1" checked>
-            <label for="range1">1-10</label>
-        </div>
-        <div class="toggle-group">
-            <input type="radio" id="range2" name="range" value="2">
-            <label for="range2">11-100</label>
-        </div>
-        <div class="toggle-group">
-            <input type="radio" id="range3" name="range" value="3">
-            <label for="range3">101-1000</label>
-        </div>
-        <button type="submit">Использовать изменения</button>
+    <form method="POST" action="{{ url_for('flast.flas') }}">
+    <div class="toggle-group">
+        <input type="radio" id="range1" name="range" value="1" checked>
+        <label for="range1">1-10</label>
+    </div>
+    <div class="toggle-group">
+        <input type="radio" id="range2" name="range" value="2">
+        <label for="range2">11-100</label>
+    </div>
+    <div class="toggle-group">
+        <input type="radio" id="range3" name="range" value="3">
+        <label for="range3">101-1000</label>
+    </div>
+    <button type="submit">Использовать изменения</button>
     </form>
 {% endblock %}
